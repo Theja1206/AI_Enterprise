@@ -1,0 +1,48 @@
+agentic-ai-poc/
+
+│
+├── app/
+│
+│   ├── api/
+│   │      ├── __init__.py
+│   │      ├── health.py
+│   │      └── router.py
+│   │
+│   ├── config/
+│   │      ├── __init__.py
+│   │      └── settings.py
+│   │
+│   ├── core/
+│   │      ├── __init__.py
+│   │      └── logging_config.py
+│   │
+│   ├── services/
+│   │      └── __init__.py
+│   │
+│   ├── middleware/
+│   │      └── __init__.py
+│   │
+│   ├── utils/
+│   │      └── __init__.py
+│   │
+│   ├── models/
+│   │      └── __init__.py
+│   │
+│   ├── schemas/
+│   │      └── __init__.py
+│   │
+│   ├── logs/
+│   │
+│   └── __init__.py
+│
+├── tests/
+│
+├── docs/
+│
+├── scripts/
+│
+├── .env
+├── .gitignore
+├── README.md
+├── requirements.txt
+└── main.py
