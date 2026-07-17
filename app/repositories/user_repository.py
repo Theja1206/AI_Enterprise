@@ -1,0 +1,36 @@
+from sqlalchemy.orm import Session
+from app.models.user import User
+
+
+class UserRepository:
+    def __init__(self, db: Session):
+        self.db = db
+     
+     #below method is python code equivalent to writing sql query for SELECT command   
+    def get_by_username(self, username: str):
+        return (
+            self.db.query(User)
+            .filter(User.username == username)
+            .first()
+        )
+    
+    def create_user(
+            self, 
+            username: str,
+            password: str,
+            role: str
+    ):
+        user = User(
+            username=username,
+            password=password,
+            role=role
+            )
+        
+        self.db.add(user)
+        self.db.commit()
+        self.db.refresh(user)
+
+        return user
+
+
+

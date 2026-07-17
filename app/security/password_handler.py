@@ -5,15 +5,18 @@ pwd_context = CryptContext(
     deprecated="auto"
 )
 
-#takes the password as input and converts it into special symbols 
-def hash_password(password: str):
-    return pwd_context.hash(password)
-
-def verify_password(
+class PasswordHandler:
+    @staticmethod
+    def hash_password(password: str) -> str:
+        return pwd_context.hash(password)
+    
+    @staticmethod
+    def verify_password(
         plain_password: str,
         hashed_password: str
-):
-    return pwd_context.verify(plain_password, hashed_password)
-
-
-
+    ) -> bool:
+        return pwd_context.verify(
+            plain_password,
+            hashed_password
+        )
+        
