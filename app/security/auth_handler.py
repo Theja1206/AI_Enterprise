@@ -18,13 +18,13 @@ class AuthHandler:
         )
     
     @staticmethod
-    def decode_access_token(token: str):
-        try:
-            return jwt.decode(
-                token,
-                settings.SECRET_KEY,
-                algorithms=[settings.JWT_ALGORITHM]
-            )
-        except JWTError:
-            return None
+    def verify_token(token: str):
+        return jwt.decode(
+            token, 
+            settings.SECRET_KEY,
+            algorithms=[
+                settings.JWT_ALGORITHM
+            ]
+        )
+    
 

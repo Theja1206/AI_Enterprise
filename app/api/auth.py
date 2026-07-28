@@ -40,7 +40,7 @@ def register(
 
 @router.post("/login", response_model=TokenResponse)
 def login(
-    request:LoginRequest,
+    request : LoginRequest,
     user_service: UserService = Depends(get_user_service)
     ):
 

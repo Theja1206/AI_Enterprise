@@ -9,18 +9,20 @@ router = APIRouter(
 
 @router.get("/profile")
 def profile(
-    current_user = Depends(get_current_user)
+    current_user=Depends(get_current_user)
     ):
     return {
-        "username": current_user.username,
-        "role": current_user["role"],
-        "message":"Welcome to your secure profile"
+        "message":"Welcome to your secure profile",
+        "role": current_user.role,
+        "username": current_user.username    
     }
 
 @router.get("/dashboard")
-def dashboard(user: str = Depends(get_current_user)):
+def dashboard(current_user=Depends(get_current_user)):
     return {
-        "role": user["role"],
-        "message":f"Welcome {user['username']}"
+        "message":"Welcome to secure dashboard",
+        "username":current_user.username,
+        "role": current_user.role
+        
     }
 

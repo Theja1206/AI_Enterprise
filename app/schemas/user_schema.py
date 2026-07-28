@@ -6,5 +6,17 @@ class UserRegisterRequest(BaseModel):
 
 #particullar user registered successfully. Below class hoda username with string as type
 class UserResponse(BaseModel):
-    username: str 
+    id: int
+    username: str
+    role: str
+
+    class Config:
+        from_attributes = True
+
+class UserUpdateRequest(BaseModel):
+    username: str | None = Field(
+        default=None,
+        min_length=4
+    ) 
+
 

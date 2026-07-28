@@ -7,16 +7,13 @@ pwd_context = CryptContext(
 
 class PasswordHandler:
     @staticmethod
-    def hash_password(password: str) -> str:
+    def hash_password(password):
         return pwd_context.hash(password)
     
     @staticmethod
-    def verify_password(
-        plain_password: str,
-        hashed_password: str
-    ) -> bool:
+    def verify_password(password, hashed_password):
         return pwd_context.verify(
-            plain_password,
+            password,
             hashed_password
         )
         
