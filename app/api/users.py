@@ -5,6 +5,7 @@ from app.database.dependencies import get_db
 from app.schemas.user_schema import UserResponse, UserUpdateRequest
 from app.security.dependecies import get_current_user
 from app.services.user_service import UserService
+from app.models.role import Role
 
 router = APIRouter(
     prefix="/users",
@@ -42,11 +43,11 @@ def get_user_by_id(
 ):
     service = UserService(db)
     user = service.get_user_by_id(user_id)
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
-        )
+    # if user is None:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND,
+    #         detail="User not found"
+    #     )
     return user
 
 #UPDATE USER 
@@ -62,11 +63,16 @@ def update_user(
 
     service = UserService(db)
     user = service.get_user_by_id(user_id)
-    if user is None:
+    if user.role != Role.ADMIN.value:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
-        )
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only Admin can update the user"
+            )
+    # if user is None:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND,
+    #         detail="User not found"
+    #     )
     updated_user = service.update_username(
         user,
         request.username
@@ -87,11 +93,17 @@ def delete_user(
 ):
     service = UserService(db)
     user = service.get_user_by_id(user_id)
-    if user is None:
+    if user.role != Role.ADMIN.value:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="User not found"
-        )
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only Admin can delete the user"
+            )
+    
+    # if user is None:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_404_NOT_FOUND,
+    #         detail="User not found"
+    #     )
     service.delete_user(user)
     db.commit()
     return {

@@ -3,9 +3,10 @@ from app.security.password_handler import PasswordHandler
 from app.models.role import Role
 from app.repositories.user_repository import UserRepository
 from sqlalchemy.exc import IntegrityError
+from app.core.exceptions import UserAlreadyExistsException, UserNotFoundException
+from fastapi import HTTPException, status
 
 class UserService:
-
     def __init__(self, db):
         self.user_repository = UserRepository(db)
 
@@ -18,7 +19,7 @@ class UserService:
         )
 
         if existing_user:
-            return None
+            raise UserAlreadyExistsException()
         
         hashed_password = (
             PasswordHandler
@@ -44,7 +45,7 @@ class UserService:
         user = self.user_repository.get_by_username(username)
         
         if user is None:
-            return None
+             return None
         
         if not PasswordHandler.verify_password(
             password,
@@ -57,10 +58,11 @@ class UserService:
 
     #GET USER BY ID
     def get_user_by_id(self, user_id: int):
-        return (
-            self.user_repository
-            .get_by_id(user_id)
-        )
+            user = self.user_repository.get_by_id(user_id)
+            if user is None:
+                raise UserNotFoundException()
+            return user 
+        
 
     #GET ALL USERS
     def get_all_users(self):
@@ -69,27 +71,29 @@ class UserService:
             .get_all_users()
         )
 
-    #UPDATE USER
+    #UPDATE USERNAME
     def update_username(self, user, username: str):
-        return(
-            self.user_repository
-            .update_user(user, username)
-        )
+            user = self.user_repository.update_user(user, username)
+            if user is None:
+                 raise UserNotFoundException()
+            return self.user_repository.update_user(user, username)
+    
 
 
     #DELETE USER
     def delete_user(self, user):
-        return(
-            self.user_repository
-            .delete_user(user)
-        )
+            user = self.user_repository.delete_user(user)
+            if user is None:
+                 raise UserNotFoundException()
+            return self.user_repository.delete_user(user)
 
     #GET USER
     def get_user(self, username: str):
-        return(
-            self.user_repository
-            .get_by_username(username)
-        )
+            user = self.user_repository.get_by_username(username)
+            if user is None:
+                raise UserNotFoundException()
+            return user
+        
     
     
 

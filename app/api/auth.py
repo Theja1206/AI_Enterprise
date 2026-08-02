@@ -22,19 +22,20 @@ def register(
     user_service: UserService = Depends(get_user_service)
     ):
 
-    success = user_service.register_user(
+    user = user_service.register_user(
         request.username,
         request.password
     )
 
-    if not success:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="user already exist"
-        )
+    # if not success:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_400_BAD_REQUEST,
+    #         detail="user already exist"
+    #     )
     
     return {
-        "message":"User registered successfully"
+        "message":"User registered successfully",
+        "user": user.username
     }
 
 
@@ -44,16 +45,16 @@ def login(
     user_service: UserService = Depends(get_user_service)
     ):
 
-    valid = user_service.validate_user(
+    user = user_service.validate_user(
         request.username,
         request.password
     )
     
-    if not valid:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invaid username/password"
-        )
+    # if user is None:
+    #     raise HTTPException(
+    #         status_code=status.HTTP_401_UNAUTHORIZED,
+    #         detail="Invaid username/password"
+    #     )
     
     token = AuthHandler.create_access_token(
         {

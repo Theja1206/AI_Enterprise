@@ -1,5 +1,7 @@
 from sqlalchemy.orm import Session
 from app.models.user import User
+from sqlalchemy.exc import SQLAlchemyError
+from app.core.exceptions import DatabaseException
 
 
 class UserRepository:
@@ -27,13 +29,18 @@ class UserRepository:
             password=password,
             role=role
             )
+        try:
         
-        self.db.add(user)
-        self.db.commit()
-        self.db.flush()
-        self.db.refresh(user)
-        return user
-    
+            self.db.add(user)
+            self.db.commit() #Saves to the database
+            self.db.flush() #It inserts into the database and ensures primary key is  generated ,but it doesn't save the record to the db.
+            self.db.refresh(user)
+            return user
+        except SQLAlchemyError as e:
+            self.db.rollback()
+            raise DatabaseException(str(e))
+        
+ 
     #GET/READ BY ID
     def get_by_id(self, user_id: int):
         return(
